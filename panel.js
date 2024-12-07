@@ -2,6 +2,7 @@ const express = require('express');
 const fileUpload = require('express-fileupload');
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = 8080;
@@ -27,19 +28,31 @@ app.post('/upload', (req, res) => {
     const botFile = req.files.botFile;
     const uploadPath = path.join(__dirname, 'bot', botFile.name);
 
+    // Pindahkan file bot ke direktori /bot
     botFile.mv(uploadPath, (err) => {
         if (err) return res.status(500).send(err);
-        res.send('File uploaded successfully!');
+
+        // Tulis pesan sukses
+        res.send('File bot uploaded successfully!');
     });
 });
 
 // Start bot
 app.post('/start', (req, res) => {
+    // Periksa apakah ada file bot di direktori
+    const botDir = path.join(__dirname, 'bot');
+    const botFiles = fs.readdirSync(botDir);
+
+    if (botFiles.length === 0) {
+        return res.status(400).send('No bot files found. Please upload your bot first.');
+    }
+
     if (botProcess) {
         return res.status(400).send('Bot is already running!');
     }
 
-    botProcess = exec('node bot/index.js', { cwd: path.join(__dirname, 'bot') });
+    // Eksekusi file bot
+    botProcess = exec('node bot/index.js', { cwd: botDir });
 
     botProcess.stdout.on('data', (data) => console.log(data));
     botProcess.stderr.on('data', (data) => console.error(data));
