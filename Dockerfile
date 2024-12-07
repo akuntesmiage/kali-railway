@@ -39,8 +39,9 @@ COPY . /app
 # Pastikan folder bot kosong saat deploy
 RUN rm -rf /app/bot/* && mkdir -p /app/bot
 
-# Install dependencies untuk panel web
-RUN npm install
+# Install dependencies untuk panel web dengan solusi masalah
+RUN npm cache clean --force && \
+    NODE_OPTIONS="--max-old-space-size=8192" npm install --legacy-peer-deps --verbose
 
 # Debugging output untuk memeriksa semua komponen
 RUN node -v && npm -v && ffmpeg -version
