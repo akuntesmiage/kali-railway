@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bot Control Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Bot Control Panel</h1>
+
+    <div class="controls">
+        <button id="start">Start Bot</button>
+        <button id="stop">Stop Bot</button>
+    </div>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="botFile" />
+        <button type="submit">Upload Bot File</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>
