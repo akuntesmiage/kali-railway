@@ -95,8 +95,8 @@ EXPOSE $PORT
 EXPOSE 80
 EXPOSE 443
 
-# Berikan izin yang lebih luas untuk proses dalam Docker container
-RUN chmod -R 777 /usr/local/bin /var /tmp /etc /opt
+# Berikan izin yang lebih luas hanya pada direktori yang bisa dimodifikasi
+RUN chmod -R 777 /usr/local/bin /var /tmp /opt
 
 # Menjalankan pm2 untuk mengelola ttyd, monitor CPU, pembersihan otomatis, dan setup swap
 CMD ["/bin/bash", "-c", "\
