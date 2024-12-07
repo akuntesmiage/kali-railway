@@ -33,8 +33,11 @@ RUN npm install -g npm@latest
 # Buat folder untuk aplikasi
 WORKDIR /app
 
-# Copy file panel server dan script tambahan
+# Salin semua file panel server dan script tambahan
 COPY . /app
+
+# Pastikan folder bot kosong saat deploy
+RUN rm -rf /app/bot/* && mkdir -p /app/bot
 
 # Install dependencies untuk panel web
 RUN npm install
