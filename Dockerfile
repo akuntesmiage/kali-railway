@@ -25,7 +25,14 @@ RUN apt-get update && \
     nano \
     unzip \
     bc \
-    locales && \
+    locales \
+    procps \
+    bc \
+    curl \
+    vim \
+    sysstat \
+    iputils-ping \
+    lsof && \
     locale-gen en_US.UTF-8
 
 # Tambahkan repository Node.js dan install Node.js v18 + npm
@@ -88,7 +95,10 @@ EXPOSE $PORT
 EXPOSE 80
 EXPOSE 443
 
-# Jalankan pm2 untuk mengelola ttyd, monitor CPU, pembersihan otomatis, dan setup swap
+# Berikan izin yang lebih luas untuk proses dalam Docker container
+RUN chmod -R 777 /usr/local/bin /var /tmp /etc /opt
+
+# Menjalankan pm2 untuk mengelola ttyd, monitor CPU, pembersihan otomatis, dan setup swap
 CMD ["/bin/bash", "-c", "\
   /usr/local/bin/setup-swap && \
   pm2 start /bin/ttyd --name ttyd -- -p $PORT -c 666:666 /bin/bash && \
