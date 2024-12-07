@@ -32,8 +32,8 @@ RUN apt-get update && \
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && \
     apt-get install -y nodejs
 
-# Install versi npm terbaru dan pm2 untuk manajemen proses
-RUN npm install -g npm@latest pm2
+# Install versi npm tertentu dan pm2 untuk manajemen proses
+RUN npm install -g npm@7.24.0 pm2
 
 # Install ttyd
 RUN wget -qO /bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.3/ttyd.x86_64 && \
@@ -83,9 +83,9 @@ fi\n' > /usr/local/bin/setup-swap && \
 # Debugging output untuk memeriksa semua komponen
 RUN node -v && npm -v && ffmpeg -version && git --version && /bin/ttyd --version && mc --version
 
-# Install dan setup npm dengan opsi untuk menghindari masalah dengan ruang memori
-RUN npm cache clean --force && \
-    NODE_OPTIONS="--max-old-space-size=8192" npm install --legacy-peer-deps
+# Menghapus cache npm dan log error, pastikan file "node_modules" tidak menyebabkan masalah
+RUN rm -rf /root/.npm /root/.node-gyp /root/.cache && \
+    npm install --legacy-peer-deps
 
 # Pastikan service dapat diakses melalui IP publik
 EXPOSE $PORT
