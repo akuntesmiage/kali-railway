@@ -13,10 +13,12 @@ RUN wget -qO /bin/ttyd https://github.com/tsl0922/ttyd/releases/download/1.7.3/t
 RUN curl -fsSL https://github.com/filebrowser/filebrowser/releases/download/v2.23.0/linux-amd64-filebrowser.tar.gz | tar -xz && \
     mv filebrowser /usr/local/bin/
 
-# Install Caddy (reverse proxy)
+# Install Caddy (reverse proxy) dengan memperbaiki GPG key error
 RUN apt-get install -y debian-keyring debian-archive-keyring apt-transport-https && \
-    curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list && \
+    curl -1sLf "https://dl.cloudsmith.io/public/caddy/stable/gpg.key" | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg && \
+    curl -1sLf "https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt" | tee /etc/apt/sources.list.d/caddy-stable.list && \
     apt-get update && apt-get install -y caddy
+
 
 # Konfigurasi Caddy untuk menggabungkan port
 RUN echo "localhost:8080 {\n reverse_proxy /terminal localhost:8080\n reverse_proxy /filebrowser localhost:8081\n}" > /etc/caddy/Caddyfile
